@@ -1,0 +1,31 @@
+name: 🚀 Deploy to A2 Hosting via FTP/SFTP
+
+on:
+  push:
+    branches:
+      - main  # or the branch you deploy from
+
+jobs:
+  ftp-deploy:
+    name: Upload via FTP
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 📦 Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: 🚀 FTP Deploy
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.FTP_HOST }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        port: ${{ secrets.FTP_PORT }}
+        protocol: "ftps"
+        server-dir: ${{ secrets.FTP_TARGET }}
+        exclude: |
+          **/.git*
+          **/.github*
+          node_modules/**
+          wp-content/uploads/**
+          wp-config.php
